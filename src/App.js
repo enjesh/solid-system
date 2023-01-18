@@ -3,6 +3,11 @@ import Header  from './Header';
 import Yarns from './Yarns';
 import Footer from './Footer';
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import GroupedYarns from './GroupedYarns';
+import Nav from './Nav';
+import NotFound from './NotFound';
+
 
 
 function App() {
@@ -52,18 +57,31 @@ function App() {
     }
   return (
     <div className="App">
-      <Header selectedSize={selectedSize}
-              yarnSizeCount={yarns.filter((yarn) => yarn.size === selectedSize).length}
-      
-      />
-      <Yarns yarns={yarns}
-       selectedSize={selectedSize}
-       handleYarnCardClick={handleYarnCardClick}
-       handleSizeSelectionChange={handleSizeSelectionChange}
+      <Router>
+        <Nav />
+        <Header selectedSize={selectedSize}
+                yarnSizeCount={yarns.filter((yarn) => yarn.size === selectedSize).length}
+        
+        />
+        <Routes>
+          <Route path='/'
+            element = {
+              <Yarns yarns={yarns}
+              selectedSize={selectedSize}
+              handleYarnCardClick={handleYarnCardClick}
+              handleSizeSelectionChange={handleSizeSelectionChange}
+            />} >
+          </Route>
 
-      
-      />
-      <Footer />
+        <Route path='GroupedYarns' element= {<GroupedYarns yarns = {yarns} selectedSize = {selectedSize} setSize = {setSize} />}>
+          </Route>
+
+          <Route path='*' element= {<NotFound />}>
+          </Route>
+
+        </Routes>
+        <Footer />
+      </Router>
     </div>
   );
 }
